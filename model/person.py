@@ -6,6 +6,7 @@ Date: 2022-04-20
 this class represents a person object
 """
 import re
+from custom_exceptions import *
 
 
 class Person:
@@ -15,11 +16,11 @@ class Person:
 		char_set = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz'-")
 
 		if not char_set.issuperset(fname, lname):
-			raise ValueError
+			raise InvalidNameError
 		regex = re.compile('[0-9]{3}-[0-9]{3}-[0-9]{4}', re.I)
 		match = regex.match(phone)
 		if not match:
-			raise ValueError  # TODO custom exception class??
+			raise InvalidPhoneError
 		self._first_name = fname
 		self._last_name = lname
 		self._phone = phone
