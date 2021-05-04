@@ -11,14 +11,17 @@ import datetime
 class Tool:
     """ this class represents a tool object"""
 
-    def __init__(self, tid, sn, t_type, description, brand, price, purchase_date: datetime = datetime.datetime.now(),
-                 borrowed: bool = False):
+    def __init__(self, sn, t_type, description, brand, price, purchase_date: datetime = datetime.datetime.now(),
+                 borrowed: bool = False, tid=None):
 
         num_set = set('1234567890.')
         char_set = set("ABCDEFGHIJKLMNOPQRSTUVWXYXZ abcdefghijklmnopqrstuvwxyz'-")
-        if not num_set.issuperset(str(tid)) or not num_set.issuperset(str(price)) or not char_set.issuperset(
+        if not num_set.issuperset(str(price)) or not char_set.issuperset(
                 str(t_type)):
             raise ValueError
+        if tid:
+            if not num_set.issuperset(str(tid)):
+                raise ValueError
         if not isinstance(purchase_date, datetime.date) or not isinstance(borrowed, bool):
             raise TypeError
         self._tid = tid
@@ -27,7 +30,7 @@ class Tool:
         self._description = description
         self._brand = brand
         self._price = price
-        self._purchase_date = purchase_date
+        self._purchase_date = purchase_date.ctime()
         self._borrowed = borrowed
 
     @property

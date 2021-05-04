@@ -3,12 +3,12 @@ from model.tool import Tool
 from datetime import datetime
 
 
-class PersonTestCase(unittest.TestCase):
+class ToolTestCase(unittest.TestCase):
 
     def setUp(self) -> None:
         """ setup for tests"""
-        self.t = Tool(1, '1A2B3C', 'Hand', '10mm Socket', 'Mac', 8.97, datetime.now(), False)
-        self.tr = Tool(2, '1A2B3C', 'Hand', '10mm Socket', 'Mac', 8.97)
+        self.t = Tool('1A2B3C', 'Hand', '10mm Socket', 'Mac', 8.97, datetime.now(), False, 1)
+        self.tr = Tool('1A2B3C', 'Hand', '10mm Socket', 'Mac', 8.97, tid=2)
 
     def tearDown(self) -> None:
         """ tear-down for tests"""
@@ -38,22 +38,22 @@ class PersonTestCase(unittest.TestCase):
     def test_object_not_created_invalid_t_type(self):
         """ test object failed creation for invalid tool type"""
         with self.assertRaises(ValueError):
-            t1 = Tool(1, '1A2B3C', 2, '10mm Socket', 'Mac', 8.97, datetime.now(), False)
+            t1 = Tool('1A2B3C', 2, '10mm Socket', 'Mac', 8.97, datetime.now(), False, 1)
 
     def test_object_not_created_invalid_price(self):
         """ test object failed creation for invalid price"""
         with self.assertRaises(ValueError):
-            t1 = Tool(1, '1A2B3C', 'Hand', '10mm Socket', 'Mac', 'INVALID ENTRY', datetime.now(), False)
+            t1 = Tool('1A2B3C', 'Hand', '10mm Socket', 'Mac', 'INVALID ENTRY', datetime.now(), False, 1)
 
     def test_object_not_created_invalid_date(self):
         """ test object failed creation for invalid date"""
         with self.assertRaises(TypeError):
-            t1 = Tool(1, '1A2B3C', 'Hand', '10mm Socket', 'Mac', 8.97, '2-2-2021', False)
+            t1 = Tool('1A2B3C', 'Hand', '10mm Socket', 'Mac', 8.97, '2-2-2021', False, 1)
 
     def test_object_not_created_invalid_borrowed_bool(self):
         """ test object failed creation for invalid borrowed boolean"""
         with self.assertRaises(TypeError):
-            t1 = Tool(1, '1A2B3C', 'Hand', '10mm Socket', 'Mac', 8.97, datetime.now(), 'FAIL')
+            t1 = Tool('1A2B3C', 'Hand', '10mm Socket', 'Mac', 8.97, datetime.now(), 'FAIL', 1)
 
     def test_repr(self):
         self.assertEqual("Tool(1,1A2B3C,Hand,10mm Socket,Mac,8.97," + str(datetime.now().ctime()) + ",False)", self.t.__repr__())
