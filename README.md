@@ -3,10 +3,12 @@ Borrow My Tools
 Base descriptions of packages and their contents
 
 controller:
+
     main_db_controller: the heart of persistence for this program, it will set up the connection and create tables
         using SQLite3 to persist locally where the program is installed
 
 model:
+
     Tool: object to represent a tool
         - tid: identifying id for persistence
         - sn: serial number of physical tool
@@ -33,5 +35,6 @@ model:
 view:
 
 tests:
+
     test_person: Unit test for person object
     test_tool: Unit test for tool object
