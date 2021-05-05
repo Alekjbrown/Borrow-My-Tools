@@ -67,9 +67,17 @@ class Person:
     def phone_number(self):
         return self._phone
 
+    @phone_number.setter
+    def phone_number(self, phone):
+        self._phone = phone
+
     @property
     def email(self):
         return self._email
+
+    @email.setter
+    def email(self, email):
+        self._email = email
 
     def update_email(self, email):
         regex = re.compile('^[A-Z0-9._%+-]+@[A-Z0-9.-]+[.][A-Z]{2,63}$')
@@ -84,3 +92,4 @@ class Person:
     def __repr__(self):
         return '%s(%s,%s,%s,%s)' % (self.__class__.__qualname__, self._first_name, self._last_name, self._phone,
                                     self._email)
+        # TODO fix __repr__ to show id as last param (include unittests)

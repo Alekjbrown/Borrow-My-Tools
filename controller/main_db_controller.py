@@ -105,6 +105,89 @@ def create_tool(conn, tool: Tool):
     return cur.lastrowid
 
 
+def get_tools(conn, id=-1):
+    """
+    Query all rows in tools table
+    :param id:
+    :param conn: Connection to SQLite database
+    :return: dictionary of tool objects
+    """
+    cur = conn.cursor()
+    if not id == -1:
+        cur.execute("SELECT * FROM tools WHERE id=" + str(id))
+    else:
+        cur.execute("SELECT * FROM tools")
+
+    rows = cur.fetchall()
+    tools =  dict()
+
+    for row in rows:
+        # TODO capture in dict of objects
+        tools[str(row[0])] = (Tool(row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[0]))
+
+    return tools
+
+
+def update_tool(conn, tool: Tool):
+    """ Update tool properties
+    :param conn: database connection from create_connection(db)
+    :param tool: tool object to update
+    :return : tool id
+    """
+    sql = ''' UPDATE tools
+            SET sn = :t1,
+                type = :t2,
+                description = :t3,
+                brand = :t4,
+                price = :t5,
+                purchase_date = :t6,
+                borrowed = :t7
+            WHERE id = :t8
+            '''
+
+    tool1 = {
+        't1': tool.serial_number,
+        't2': tool.tool_type,
+        't3': tool.description,
+        't4': tool.brand,
+        't5': tool.price,
+        't6': tool.purchase_date,
+        't7': tool.borrowed,
+        't8': tool.tool_id
+            }
+
+    cur = conn.cursor()
+    cur.execute(sql, tool1)
+    conn.commit()
+    conn.close()
+    return cur.lastrowid
+
+
+def delete_all_tools(conn):
+    """
+    Delete all rows in tools table
+    :param conn: Connection to SQLite db
+    :return:
+    """
+    sql = "DELETE FROM tools"
+    cur = conn.cursor()
+    cur.execute(sql)
+    conn.commit()
+
+
+def delete_tool_by_id(conn, id):
+    """
+    Delete tool by tool id
+    :param conn: Connection to SQLite database
+    :param id: id of the tool
+    :return:
+    """
+    sql = "DELETE FROM tools WHERE id=?"
+    cur = conn.cursor()
+    cur.execute(sql, (id,))
+    conn.commit()
+
+
 def create_person(conn, person: Person):
     """ Create a new person in the persons table
     :param conn: connection object
@@ -127,19 +210,114 @@ def create_person(conn, person: Person):
     return cur.lastrowid
 
 
-# if __name__ == '__main__':
+def get_persons(conn, id=-1):
+    """
+    Query all rows in persons table
+    :param id:
+    :param conn: Connection to SQLite database
+    :return: dictionary of person objects
+    """
+    cur = conn.cursor()
+    if not id == -1:
+        cur.execute("SELECT * FROM persons WHERE id=" + str(id))
+    else:
+        cur.execute("SELECT * FROM persons")
+
+    rows = cur.fetchall()
+    persons =  dict()
+
+    for row in rows:
+        # TODO capture in dict of objects
+        persons[str(row[0])] = (Person(row[1],row[2],row[3],row[4],row[0]))
+
+    return persons
+
+
+def update_person(conn, person: Person):
+    """ Update person properties
+    :param conn: database connection from create_connecction(db)
+    :param person: person object to update
+    :return: person id
+    """
+    sql = ''' UPDATE persons
+            SET first_name = :t1,
+                last_name = :t2,
+                phone = :t3,
+                email = :t4
+            WHERE id = :t8
+            '''
+
+    person1 = {
+        'p1': person.first_name,
+        'p2': person.last_name,
+        'p3': person.phone_number,
+        'p4': person.email,
+        'p8': person.id
+            }
+
+    cur = conn.cursor()
+    cur.execute(sql, person1)
+    conn.commit()
+    conn.close()
+    return cur.lastrowid
+
+
+def delete_person_by_id(conn, id):
+    """
+    Delete person by id
+    :param conn: Connection to SQLite database
+    :param id: id of the person
+    :return:
+    """
+    sql = "DELETE FROM persons WHERE id=?"
+    cur = conn.cursor()
+    cur.execute(sql, (id,))
+    conn.commit()
+
+
+def delete_all_persons(conn):
+    """
+    Delete all rows from persons table
+    :param conn: Connection to SQLite databse
+    :return:
+    """
+    sql = "DELETE FROM persons"
+    cur = conn.cursor()
+    cur.execute(sql)
+    conn.commit()
+
+
+if __name__ == '__main__':
     # test define tables
     # define_tables()
 
+    db = r"../Content/pythonsqlite.db"
+    conn = create_connection(db)
+    tool = Tool('A123', 'hand', '3/8 ratchet', 'Mac', 25.87, datetime.datetime.now(), False)
+    person = Person('Ali', 'Brown', '515-771-5940', 'alekjbrown@live.com')
+
     # test inserting a tool
-    # db = r"../Content/pythonsqlite.db"
-    # conn = create_connection(db)
-    # tool = Tool('A123', 'hand', '3/8 ratchet', 'Mac', 25.87, datetime.datetime.now(), False)
     # create_tool(conn, tool)
 
     # test inserting a person
-    # db = r"../Content/pythonsqlite.db"
-    # conn = create_connection(db)
-    # person = Person('Ali', 'Brown', '515-771-5940', 'alekjbrown@live.com')
     # create_person(conn, person)
-    # conn.close()
+
+    # test updating a tool
+    # tools = get_tools(conn,1)
+    # tools["1"].price = 5.00
+    # tools["1"].borrowed = True
+    # update_tool(conn, tools["1"])
+
+    # test delete all tools
+    # delete_all_tools(conn)
+
+    # test get all tools
+    # tools = get_tools(conn)
+    # print(tools)
+
+    # test get persons
+    # persons = get_persons(conn)
+    # print(persons)
+
+    # close conn
+    conn.close()

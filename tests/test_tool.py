@@ -56,7 +56,7 @@ class ToolTestCase(unittest.TestCase):
             t1 = Tool('1A2B3C', 'Hand', '10mm Socket', 'Mac', 8.97, datetime.now(), 'FAIL', 1)
 
     def test_repr(self):
-        self.assertEqual("Tool(1,1A2B3C,Hand,10mm Socket,Mac,8.97," + str(datetime.now().ctime()) + ",False)", self.t.__repr__())
+        self.assertEqual("Tool(1,1A2B3C,Hand,10mm Socket,Mac,8.97," + str(datetime.now().date()) + ",False)", self.t.__repr__())
 
 
 if __name__ == '__main__':
